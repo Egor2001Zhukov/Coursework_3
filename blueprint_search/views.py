@@ -1,12 +1,13 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from utils import *
 
 
-post_blueprint = Blueprint('post_blueprint', __name__, template_folder='templates', )
+search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates', )
 
 
-@post_blueprint.route('/posts/<int:pk>', methods=['GET'])
-def post_by_pk(pk):
-    post = get_post_by_pk(pk)
-    comments = get_comments_by_post_id(pk)
-    return render_template('post.html', post=post, comments=comments)
+@search_blueprint.route('/search', methods=['GET'])
+def posts_by_search():
+    text = request.args.get('words')
+    posts = search_for_posts(text)
+    dict_of_comments = {post['pk']: get_comments_by_post_id(post['pk']) for post in get_posts_all()}
+    return render_template('search.html', posts=posts, comments=dict_of_comments)

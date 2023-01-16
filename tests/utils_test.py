@@ -19,7 +19,7 @@ class Test_get_post_by_pk:
             get_post_by_pk(0)
 
 
-class Test_search_for_posts:
+class TestSearchForPosts:
     def test_type_search_for_posts(self):
         assert type(search_for_posts("aaa")) == list, "Возвращается не список"
 
@@ -39,4 +39,3 @@ class Test_get_comments_by_post_id:
     def test_valueerror_get_comments_by_post_id(self):
         with pytest.raises(ValueError):
             get_comments_by_post_id(0)
-

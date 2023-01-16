@@ -3,7 +3,7 @@ import json
 
 def get_posts_all():
     """Возвращает посты"""
-    with open('../data/posts.json', 'r', encoding='utf-8')as file:
+    with open('data/posts.json', 'r', encoding='utf-8')as file:
         return json.load(file)
 
 
@@ -21,6 +21,10 @@ def get_posts_by_user(user_name):
 def get_comments_by_post_id(post_id):
     """Возвращает комментарии определенного поста.
     Функция должна вызывать ошибку ValueError если такого поста нет и пустой список, если у поста нет комментов"""
+    if type(post_id) != int:
+        raise TypeError("Должно быть значение типа int")
+    if post_id < 0:
+        raise ValueError("Должно быть значение выше нуля")
     post_pk = 0
     comments_of_post = []
     posts = get_posts_all()
@@ -28,7 +32,7 @@ def get_comments_by_post_id(post_id):
         if post_id == post['pk']:
             post_pk = post_id
     if post_pk:
-        with open('../data/comments.json', 'r', encoding='utf-8')as file:
+        with open('data/comments.json', 'r', encoding='utf-8')as file:
             for comment in json.load(file):
                 if comment["post_id"] == post_id:
                     comments_of_post.append(comment)
@@ -39,6 +43,8 @@ def get_comments_by_post_id(post_id):
 
 def search_for_posts(query):
     """Возвращает список постов по ключевому слову"""
+    if type(query) != str:
+        raise TypeError("Должно быть значение типа str")
     posts = get_posts_all()
     posts_query = []
     for post in posts:
@@ -49,9 +55,11 @@ def search_for_posts(query):
 
 def get_post_by_pk(pk):
     """Возвращает один пост по его идентификатору"""
+    if type(pk) != int:
+        raise TypeError("Должно быть значение типа int")
+    if pk == 0:
+        raise ValueError("Должно быть значение выше нуля")
     posts = get_posts_all()
     for post in posts:
         if post["pk"] == pk:
             return post
-
-print(get_post_by_pk(2))
